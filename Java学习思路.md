@@ -3,10 +3,18 @@
 ## Java
 
 - JavaSE
+  - 基础语法
+  - 流
+  - 函数式编程
+    - lambda
+    - 函数式接口
 
 ## 并发编程
 
 - 线程池
+- 锁抢占
+  - AQS
+  - 可重入
 
 ## 数据库
 
@@ -15,13 +23,22 @@
 
 ## Spring
 
+- 源码
+- springcontext
+- 切面与代理
+
 ## Mybatis
+
+- 使用思路
+- 原理
+- 源码
 
 ## 数据结构+算法
 
 - leetcode
 - 树
 - 链表
+- 动态规划
 
 ## IO
 
@@ -42,6 +59,7 @@
 ## NoSQL
 
 - MongoDB
+- Redis
 
 ## MQ
 
@@ -52,7 +70,25 @@
 
 ## JVM
 
+- 垃圾回收
+- 内存模型
+
+## 分布式协调
+
+- 中间件
+  - zookeeper
+  - eurka
+  - Nacos
+- 协议
+  - Paxos
+  - Raft
+
+
 ## Linux
+
+- 命令
+- bash脚本
+- 内核
 
 ## 操作系统
 
@@ -60,7 +96,12 @@
 
 ## 开发运维工具
 
+- arthrna
+
 ## 单元测试
+
+- Junit
+- Mockito
 
 ## 搜索引擎
 
