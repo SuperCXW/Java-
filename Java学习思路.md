@@ -2,9 +2,16 @@
 
 ## Java
 
+- JavaSE
+
 ## 并发编程
 
+- 线程池
+
 ## 数据库
+
+- mysql
+- 分布式数据库
 
 ## Spring
 
@@ -12,15 +19,36 @@
 
 ## 数据结构+算法
 
+- leetcode
+- 树
+- 链表
+
 ## IO
+
+- AIO
+- BIO
+- NIO
 
 ## 定时任务
 
+- LTS
+- XXL-JOB
+
 ## RPC调用
+
+- Dubbo
+- GRPC
 
 ## NoSQL
 
+- MongoDB
+
 ## MQ
+
+- kafka
+- rocket
+- active
+- rabbit
 
 ## JVM
 
@@ -36,11 +64,19 @@
 
 ## 搜索引擎
 
+- ES
+- SOLR
+
 ## 网络安全
 
 ## 日志工具
 
-## 为服务设计
+- slf4j
+- log4j
+- logback
+- log4j2
+
+## 微服务设计
 
 ## 设计思想+设计模式
 
