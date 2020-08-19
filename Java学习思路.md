@@ -96,7 +96,8 @@
 
 ## 开发运维工具
 
-- arthrna
+- Arthas
+- Git
 
 ## 单元测试
 
