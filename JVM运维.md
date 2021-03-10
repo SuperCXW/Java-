@@ -32,4 +32,94 @@
 启动后只显示版本信息就退出>
 -J< flag >
 因为 jhat 命令实际上会启动一个JVM来执行, 通过 -J 可以在启动JVM时传入一些启动参数. 例如, -J-Xmx512m 则指定运行 jhat 的Java虚拟机使用的最大堆内存为 512 MB. 如果需要使用多个JVM启动参数,则传入多个 -Jxxxxxx.
+```  
+
+### jmap [option]
+***option***
 ```
+dump 生成堆栈转储快照
+finalizerinfo : 显示在F-Queue队列等待Finalizer线程执行finalizer方法的对象
+heap : 显示Java堆详细信息
+histo : 显示堆中对象的统计信息
+permstat : 打印Java堆内存的永久保存区域的类加载器的智能统计信息。对于每个类加载器而言，它的名称、活跃度、地址、父类加载器、它所加载的类的数量和大小都会被打印。此外，包含的字符串数量和大小也会被打印。
+F : 当-dump没有响应时，强制生成dump快照 
+```
+常用dump方法: -dump:live,format=b,file=<filename> pid 
+
+### jps [option] [hostid] 显示虚拟机进程
+***option***
+```
+-l 输出主类名或者jar路径
+-q 只输出 LVMID
+-m 输出JVM启动时传给main的参数
+-V 输出JVM启动时指定的JVM参数
+```
+
+### jstat [option] LVMID [interval][count]
+```
+option: 操作参数
+interval:连续输出时间间隔
+count:连续输出次数
+```
+#### option参数
+> -class: 监视类装载、卸载数量、总空间以及耗费的时间  
+
+> -compiler: 输出JIT编译过的方法数量耗时等  
+
+> -gc: 垃圾回收堆的行为统计  
+>> S0C:survivor0区的总容量  
+>> S1C:survivor1区的总容量  
+>> S0U:survivor0区的已使用容量  
+>> S1U:survivor1区的已使用容量  
+>> EC:eden区的总容量  
+>> EU:eden区的使用量  
+>> OC:old区的总容量  
+>> OU:old区的已使用容量  
+>> PC:当前perm的总容量  
+>> PU:当前perm的已使用容量  
+>> YGC:young gc次数  
+>> YGCT:young gc时间  
+>> FGC:full gc次数  
+>> FGTT:full gc时间  
+>> GCT:GC总时间  
+
+> -gccapacity 同-gc 同时显示各区域的最大最小空间  
+>> NGCMN:新生代占用的最小空间  
+>> NGCMX:新生代占用的最大空间  
+>> OGCMN:老年代占用的最小空间  
+>> OGCMX:老年代占用的最大空间  
+>> OGC:当前老年代容量  
+>> OG:当前老年代空间  
+>> PGCMN:perm占用的最小空间
+>> PGCMX:perm占用的最大空间
+
+>  -gcutil 同-gc，不过输出的是已使用空间占总空间百分比
+
+> -gccause 垃圾收集统计概述 附加最近两次gc发生的原因
+>> LGCC: 最近垃圾回收的原因
+>> GCC: 当前垃圾回收的原因
+
+>-gcnew 统计新生代的行为
+>> TT:Tenuring threshold 提升阈值
+>> MTT:最大的TT
+>> DSS:survivor区域大小
+
+> -gcnewcapacoty
+> gc与其相对应的内存空间统计
+>> NGC:当前年轻代的容量
+>> S0CMX:最大的S0空间 
+>> S0C:当前S0空间 
+>> ECMX:最大eden空间
+>> EC:当前eden空间
+
+>-gcold 统计老年代的行为
+
+> -gcoldcapacoty 统计老年代的空间
+
+> -gcpermcapacoty 统计perm的空间
+
+> -printcompilation hotspot编译方法统计
+>>Compiled 被执行的编译任务数量
+>>Size 方法字节码的字节数
+>>Type编译类型
+>>Method 编译方法的类名和方法名
