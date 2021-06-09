@@ -68,9 +68,41 @@
     - 创建一个invoker，放入到exporter里面
         - invoker是实体域，dubbo的核心模型
         - 放入前调用注册中心的导出接口，在zk创建节点，完成导出
+- 服务引入
+    - spring装配的时候，就生成对应的代理类装配 ReferBean
 - 服务调用过程
     - 
 
 - 踢出失效的服务
     
 - 服务引入
+
+- dubbo分层
+    - 接口服务层 Service 业务逻辑API
+    - 配置层 对外配置接口 ServiceConfig ReferenceConfig为中心
+    - 服务代理层 服务接口透明代理 生成服务的客户端Stub和服务端的Skeleton，以ServiceProxy为中心，
+    - 服务注册层 封装服务地址的注册和发现
+    - 路由层 封装多个提供者的路由和负载均衡
+    - 监控层 RPC调用次数和调用时间监控
+    - 远程调用层 封装RPC调用 
+    - 信息交换层
+    - 网络传输层
+    - 数据序列化层
+
+- 注册中心
+    - zk 基于watch来做
+    - multiCast不需要中心，直接广播地址
+    - Redis
+    - simple注册中心
+
+- 通信
+    - 基于Netty
+
+- 支持协议
+    - dubbo 长连接+NIO
+    - RMI JDK的RMI协议
+    - WebService
+    - Http
+    - Hessian
+    - Memcache
+    - Redis
