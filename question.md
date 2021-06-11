@@ -50,3 +50,7 @@ LFU(Least Frequently Used)：淘汰最近访问频率最小的元素。
 46. lamada
 47. 常见的单例
 48. volitile
+49. 写一段死锁的代码
+50. 多线程打印ABC
+51. 红包算法，输入红包金额和领取人数，返回每个人领取的红包金额,金额单位为分
+52. 用java代码实现LinkedList的add()和remove()方法。要求自行设计LinkedList数据结构，不要外部类库和辅助函数来处理。

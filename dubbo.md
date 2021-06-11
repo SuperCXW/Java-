@@ -38,12 +38,12 @@
     - failfast Cluster快速失败 只调用一次
     - failSafe Cluster失败安全 出现异常直接忽略
     - failback Cluster 失败自动恢复 记录失败请求，定时重发
-    - Forking Cluster 并行调用多个服务提供者
+    - Forking Cluster 并行调用多个服务提供者，几个成功就返回
     - Broadcast Cluster 广播逐个调用提供者
 - 默认负载均衡策略
     - 随机 按权重设置随机概率
     - 轮询，按公约后的权重 设置 轮询比例
-    - 最少活跃调用数，相同活跃数随机调用
+    - 最少活跃调用数，相同活跃数随机调用 这个最小活跃数，其实就是同一时间，正在处理的请求数
     - 一致性hash 相同的请求，总是发给同一提供者
         - 一致性hash
             > 普通hash算法，在分布式场景下，hash值，映射规则可能会发生变化
@@ -71,7 +71,11 @@
 - 服务引入
     - spring装配的时候，就生成对应的代理类装配 ReferBean
 - 服务调用过程
-    - 
+    - 动态代理生成的bean invoke
+    - 在Directory 服务字典中获取所有的invoker
+    - Router 做route，选出调用的服务
+    - LoadBalance 根据负载均衡选择对应的机器
+    - 当前invoker自带集群容错方案
 
 - 踢出失效的服务
     
@@ -106,3 +110,7 @@
     - Hessian
     - Memcache
     - Redis
+
+- directory 服务字典
+    - RegistryDirectory 动态的，根据zk推送的节点变化而变化
+    - StaticDirectory 固定的多注册中心
