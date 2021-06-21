@@ -40,6 +40,18 @@
     - failback Cluster 失败自动恢复 记录失败请求，定时重发
     - Forking Cluster 并行调用多个服务提供者，几个成功就返回
     - Broadcast Cluster 广播逐个调用提供者
+    - AvailableCluster 循环每个provider，调用第一个可用的
+    - MergeableCluster 按组合并返回结果 ，比如菜单服务，接口一样，但有多种实现，用group区分，现在消费者需从每种group中调用一次返回结果，合并结果返回，这样就可以实现聚合菜单项。
+    - MockClusterWrapper 判断是否需要开启 Mock 机制，由 invoke 方法完成。根据 MockInvokersSelector 过滤出对应的 Mock Invoker，由 selectMockInvoker 完成，实际是委托给 MockInvokersSelector 完成路由。执行 MockInvoker，由 doMockInvoke方法完成，实际是委托给 MockInvoker。
+    - ZoneAwareCluster 2.7.5 加入的cluster 多注册中心的场景（多地机房）
+    > 1.制定优先级  
+      2.根据invoker的url上的zonekey做匹配
+      3.权重轮训 
+      4.选择第一个可用的
+
+- 粘滞连接
+    - sticky 执行粘滞连接，适用于有状态的服务
+
 - 默认负载均衡策略
     - 随机 按权重设置随机概率
     - 轮询，按公约后的权重 设置 轮询比例
@@ -136,4 +148,5 @@
         > 依赖ASM
     - javassist动态代理
     - asm字节码
-    - javassist字节码
+    - javassist操作字节码来生成代理实例
+    - 生成代理 jdk proxy最快 执行起来 asm字节码最快
