@@ -33,6 +33,12 @@ b的创建的准备工作：在创建之前，将b放入到singletonsCurrentlyIn
 b实例化完成，而且依赖也注入完成了，那么进行最后的处理。将b实例从singletonsCurrentlyInCreation队列移除，表明b对象实例化结束。然后将b放入到singletonObjects和registeredSingletons队列，并从singletonFactories和earlySingletonObjects队列移除。最后将b对象注入到a对象中。然后a完成了创建过程。
 a实例化完成，而且依赖也注入完成了，那么进行最后的处理。将a实例从singletonsCurrentlyInCreation队列移除，表明a对象实例化结束。然后将a放入到singletonObjects和registeredSingletons队列，并从singletonFactories和earlySingletonObjects队列移除。此时完成了a对象的创建。
 
+A半成品加入第三级缓存
+A填充属性注入B -> 创建B对象 -> B半成品加入第三级缓存
+B填充属性注入A -> 创建A代理对象，从第三级缓存移除A对象，A代理对象加入第二级缓存（此时A还是半成品，B注入的是A代理对象）
+创建B代理对象（此时B是完成品） -> 从第三级缓存移除B对象，B代理对象加入第一级缓存
+A半成品注入B代理对象
+从第二级缓存移除A代理对象，A代理对象加入第一级缓存
 
 
 如果 Spring 选择二级缓存来解决循环依赖的话，那么就意味着所有 Bean 都需要在实例化完成之后就立马为其创建代理，而 Spring 的设计原则是在 Bean 初始化完成之后才为其创建代理。所以，Spring 选择了三级缓存。但是因为循环依赖的出现，导致了 Spring 不得不提前去创建代理，因为如果不提前创建代理对象，那么注入的就是原始对象，这样就会产生错误。
@@ -86,6 +92,21 @@ LFU(Least Frequently Used)：淘汰最近访问频率最小的元素。
 50. 多线程打印ABC
 51. 红包算法，输入红包金额和领取人数，返回每个人领取的红包金额,金额单位为分
 52. 用java代码实现LinkedList的add()和remove()方法。要求自行设计LinkedList数据结构，不要外部类库和辅助函数来处理。
+53. beanfactory和ApplicationContext
+> beanfactory是一个用来访问 Spring 容器的 root 接口，要访问 Spring 容器，我们将使用 Spring 依赖注入功能，使用 BeanFactory 接口和它的子接口  
+ApplicationContext 是 Spring 应用程序中的中央接口，用于向应用程序提供配置信息
+它继承了 BeanFactory 接口，所以 ApplicationContext 包含 BeanFactory 的所有功能以及更多功能！它的主要功能是支持大型的业务应用的创建
+特性：
+
+Bean instantiation/wiring
+Bean 的实例化/串联
+自动的 BeanPostProcessor 注册
+自动的 BeanFactoryPostProcessor 注册
+方便的 MessageSource 访问（i18n）
+ApplicationEvent 的发布
+与 BeanFactory 懒加载的方式不同，它是预加载，所以，每一个 bean 都在 ApplicationContext 启动之后实例化
+这里是 ApplicationContext 的使用例子：
+
 
 # dubbo
 --- 
