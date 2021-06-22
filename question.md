@@ -1,10 +1,28 @@
 1. redis压力大
+ > 1.减少big key的情况    
+ > 2.检查慢命令，检查复杂命令的使用情况
+ > 3.主从+cluster分片
+ > 4.集中过期
+ > 5.内存占用高，和磁盘发生swap
+ > 6.后台持久化备份影响，调整备份周期
+ > 7.检查网络情况
 2. 序列化的作用
+  > 可以将对象数据进行传输
+  > 跨平台存储
 3. dubbo机制
+  > 1.SPI加载功能点
+  > 2.actipive 动态加载SPI
 4. mvcc
+  >
 5. SynchronousQueue使用场景
+  > 线程间传递数据，生产消费者模型
 6. 幂等性怎么解决
+  > 添加流水日志,或者token验证
+  > 数据库唯一索引
+  > 加锁
+  > 状态机控制
 7. 线程安全的List Map 其他List
+  >  CopyOnWriteArrayList  读写分离，写的时候，加lock，复制一个数组，结束后指向新容器，解lock，读操作无锁
 8. spring循环依赖
 > a依赖b b依赖a  
   三级缓存   
@@ -107,6 +125,74 @@ ApplicationEvent 的发布
 与 BeanFactory 懒加载的方式不同，它是预加载，所以，每一个 bean 都在 ApplicationContext 启动之后实例化
 这里是 ApplicationContext 的使用例子：
 
+54. varchar和char的区别
+```
+char 定长 效率高 一般用于固定长度的表单提交数据存储
+varchar 不定长 效率低 只能指定最大长度 最后会有一位用来存储字符串长度
+```
+55. 并发编程三要素 
+> 原子 可见 有序  
+
+56. wait/notify范式
+```
+synchroized (obj) {
+  whilt(<condition>) {
+    obj.wait
+  }
+}
+
+sychroized(obj) {
+  obj.notify
+}
+```
+
+57. 单例
+```
+public class Singleton {
+    private volatile static Singleton singleton;
+
+    private Singleton() {
+    }
+
+    public static Singleton getSingleton() {
+        if (singleton == null) {
+            synchronized (Singleton04.class) {
+                if (singleton == null) {
+                    singleton = new Singleton();
+                }
+                return singleton;
+            }
+        }
+        return singleton;
+    }
+}
+```
+
+58. coforeach
+> 实现了Iterable就能使用该语法糖
+
+59. redis为什么这么快
+> 1. 内存操作
+> 2. 单线程 单进程 减少cpu切换，没有多线程协同
+> 3. 相较关系型数据库，数据结构简单，
+> 4. 网络层基于io多路复用
+
+60. io五种模型
+> 1. 阻塞 IO 客户端请求，等待系统态收到数据，返回数据
+> 2. 非阻塞IO， 客户端请求， 系统态不阻塞，返回错误，然后客户端轮询获取数据
+> 3. IO多路复用 通过一种新的系统调用，一个进程可以监视多个文件描述符，一旦某个描述符就绪，内核kernel能够通知程序进行相应的IO调用，实际上就是某个线程轮询select/epoll来获取可读写的socket连接，和NIO不同，这种轮询，交给了内核态，减少了用户态和内核态之间的交互切换  channle会有四个标志 连接 阻塞 可读 可写，轮询channel根据标志来进行后续操作
+> 4. 异步IO 用户态，调用io，等待内核态完成io后，回调用户态线程
+> 5. 信号驱动io模型 数据准备好，内核向用户5态发送一个信号，用户态来read
+
+61. BIO NIO AIO
+> 1. BIO 线程阻塞受理IO请求，同步阻塞
+> 2. NIO  
+    - 时间驱动，
+    - buffer channel  selector  
+    - selector 轮询channel这一堆缓冲区，看哪个是可读可写的
+    - redis就是这么处理的，selector收集事件，转给后端线程 
+> 3. AIO  异步非阻塞
+    - 异步IO，其他类型，IO发生时，还是当前线程同步进行，但是AIO是IO读写完成后回调处理的
 
 # dubbo
 --- 
