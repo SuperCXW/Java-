@@ -57,4 +57,8 @@
     - producer作为客户端发送消息时，需要根据消息的topic从本地缓存的topicpublishinfotable获取路由信息，如果没有则更新路由信息，从nameserver上重新拉取，默认30s去更新一次
     - producer根据nameserver拿到的路由信息，选择一个队列发送消息，broker接收消息，落盘
     - consumer 根据nameserver中的路由信息，负载均衡后，选择一个或几个队列拉取消息消费
+- 负载均衡
+    - producer端在发送消息时，会先根据topic找到指定的TopicPublishInfo，然后会在queuelist中选择一个队列，默认是随机递增取模对应的哪个队列，如果开启了sendLatencyFaultEnable。会对之前失败的broker做一定时间的退避
+    - consumer启动后，会不断向所有的broker发送心跳包，broker收到后，将关系维护在本地
+    - 
        
