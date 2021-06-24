@@ -60,5 +60,10 @@
 - 负载均衡
     - producer端在发送消息时，会先根据topic找到指定的TopicPublishInfo，然后会在queuelist中选择一个队列，默认是随机递增取模对应的哪个队列，如果开启了sendLatencyFaultEnable。会对之前失败的broker做一定时间的退避
     - consumer启动后，会不断向所有的broker发送心跳包，broker收到后，将关系维护在本地
-    - 
-       
+    - 启动后，调用rebalance()根据广播还是集群，不同的负载均衡策略
+        - 从rebalanceimpl的本地缓存topicsubscribeinfotable 获取topic下消息消费队列集合， 根据topic和consumegroup去broker获取消费队列
+- 事务消息
+    - 暂时不能被 Consumer消费的消息。Producer已经把消息发送到 Broker端，但是此消息的状态被标记为不能投递，处于这种状态下的消息称为半消息。事实上，该状态下的消息会被放在一个叫做 RMQ_SYS_TRANS_HALF_TOPIC的主题下。 
+    - 当 Producer端对它二次确认后，也就是 Commit之后，Consumer端才可以消费到；那么如果是Rollback，该消息则会被删除，永远不会被消费到。 
+    - 对没有commit rollback的消息，从broker进行一次回查(最多15次，否则回滚)， producer收到回查消息，检查回查消息对应的本地事务状态，根据本地事务状态，重新commit或rollback
+    - 引入op消息，区别这条事务消息，是否已经确定状态，如果一条消息没有对应的op消息，说明事务状态没确定。引入op消息，事务消息不管是commit还是rollback都会记录一个op操作，commit相对rollback只是在写入op消息前创建half消息的索引
