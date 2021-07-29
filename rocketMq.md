@@ -31,7 +31,7 @@
     - topic
     > topic 表示消息的第一级类型，区分不同的消息，最细粒度的订阅单位，group可以订阅多个topic  tag用来二级类型
     - queue
-    > 消息的物理管理单位 ，一个topic下可以有多个queue，提供了水品扩展的能力
+    > 消息的物理管理单位 ，一个topic下可以有多个queue，提供了水平扩展的能力
     - offset
     - group
     > 订阅多个topic
@@ -125,9 +125,11 @@ JOB轮询超过一定时间（时间根据业务配置）还未发送成功的�
 
 多个broker ，如果发送失败了，会选择下一个broker重试
 
+查询日志索引,检查消息是否投递
+
 总结： 重试 同步发送 多master broker
 
-- MQ丢失
+- borker MQ丢失
 如果生产者保证消息发送到MQ，而MQ收到消息后还在内存中，这时候宕机了又没来得及同步给从节点，就有可能导致消息丢失。
 
 比如RocketMQ：
@@ -139,6 +141,8 @@ RocketMQ分为同步刷盘和异步刷盘两种方式，默认的是异步刷盘
 消费者丢失消息的场景：消费者刚收到消息，此时服务器宕机，MQ认为消费者已经消费，不会重复发送消息，消息丢失。
 
 RocketMQ默认是需要消费者回复ack确认，而kafka需要手动开启配置关闭自动offset。
+
+consumer会维护一个offset,对应messagequeue的min offset,标记已成功消费消息的下标
 
 消费方不返回ack确认，重发的机制根据MQ类型的不同发送时间间隔、次数都不尽相同，如果重试超过次数之后会进入死信队列，需要手工来处理了。（Kafka没有这些）
 
@@ -217,6 +221,10 @@ MQ收到消息后返回ack确认
        对于 NameServer，它的高可用保障是集群化部署，各个 NameServer 之间互不通信，每个 NameServer 都有一份完整的 Broker 路由信息。当某一个 NameServer 挂掉后，对集群没有任何影响，只要还有一个 NameServer 存活，就能提供完整的服务。
 
        对于 Broker，它高可用保障是主从架构和多副本策略。Broker 有 Master 和 Slave 两种角色，Master 和 Salve 上的数据是一模一样的，Master Broker 收到消息后会同步给 Slave Broker。每个 Master Broker 和 Slave Broker 都会向所有 NameServer 注册。Master 宕机了，会重新选举一个 Slave 作为 Master 继续提供写服务，对读服务无影响，每个 Slave 都可以读但是不可以写；Slave 宕机了，对服务无影响。
+
+       producer 生产如果broker挂了,可以发到其他broker的queue
+       consumer可以去slave读取
+       https://xie.infoq.cn/article/37d3371409c1a0d626178d49e
 
 ## 读写分离
 
@@ -349,3 +357,8 @@ SLAVE_NOT_AVAILABLE
 ``` 
   ![avatar](./pic/mq索引.png )  
 
+## 延迟消息
+ - 多级时间轮+延迟加载 https://blog.51cto.com/u_15072904/2615407
+
+
+- 如何做事务回查

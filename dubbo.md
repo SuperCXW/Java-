@@ -34,7 +34,7 @@
     - 集群容错
     - 服务路由
 - 集群容错方案
-    - failover Cluster失败自动切换
+    - failover Cluster失败自动切换 默认
     - failfast Cluster快速失败 只调用一次
     - failSafe Cluster失败安全 出现异常直接忽略
     - failback Cluster 失败自动恢复 记录失败请求，定时重发
@@ -53,7 +53,7 @@
     - sticky 执行粘滞连接，适用于有状态的服务
 
 - 默认负载均衡策略
-    - 随机 按权重设置随机概率
+    - 随机 按权重设置随机概率  默认
     - 轮询，按公约后的权重 设置 轮询比例
     - 最少活跃调用数，相同活跃数随机调用 这个最小活跃数，其实就是同一时间，正在处理的请求数
     - 一致性hash 相同的请求，总是发给同一提供者
@@ -105,8 +105,7 @@
     - 当前invoker自带集群容错方案
 
 - 踢出失效的服务
-    
-- 服务引入
+    - 基于zk ,服务失效,自动释放临时节点
 
 - dubbo分层
     - 接口服务层 Service 业务逻辑API
@@ -150,3 +149,21 @@
     - asm字节码
     - javassist操作字节码来生成代理实例
     - 生成代理 jdk proxy最快 执行起来 asm字节码最快
+
+- 默认协议是什么 原因
+    - dubbo协议 采用NIO单一长链接,使用线程池处理并发请求,减少握手频率,加大并发效率,性能较好 但是大数据量传输会有性能问题
+    - RMI JDK标准实现 和rmi接口结合 基于tcp协议完成 支持原生RMI接口  会有一些🔗失败的情况 短链接
+    - hessian 可以支持原生hessian 基于http协议 每次请求开销大,重新握手链接
+    - http sping的httpinvoker实现
+    - webservice 基于CXF实现
+    - thrift
+
+- 默认序列化是什么,原因
+   - hessian
+   -  jdk序列化
+   - json
+   - soap文本序列化
+- dubbo响应返回怎么找到对应的请求方
+  - https://juejin.cn/post/6962430318267596813#heading-13
+
+- 启动时,spring解析bean, 遇到dubbo的命名空间,调用dubbo的解析器,然后返回一个BeanDefinition,注册到beanDefinition,实际上是一个factory bean

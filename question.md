@@ -90,7 +90,8 @@ reentrolocak  countdownlatch semephore syclebarrier
 27. lru的缺点：LRU(Least Recently Used ):淘汰最后被访问时间最久的元素。
 缺点：可能会由于一次冷数据的批量查询而误导大量热点的数据。
 LFU(Least Frequently Used)：淘汰最近访问频率最小的元素。
-缺点：1. 最新加入的数据常常会被踢除，因为其起始方法次数少。 2. 如果频率时间度量是1小时，则平均一天每个小时内的访问频率1000的热点数据可能会被2个小时的一段时间内的访问频率是1001的数据剔除掉 
+缺点：1. 最新加入的数据常常会被踢除，因为其起始方法次数少。 
+     2. 如果频率时间度量是1小时，则平均一天每个小时内的访问频率1000的热点数据可能会被2个小时的一段时间内的访问频率是1001的数据剔除掉 
 28. hash一致性协议：
 29. oauth2
 30. 高可用实现
@@ -292,6 +293,34 @@ https://www.cnblogs.com/wade-luffy/p/5969418.html
 76. https://tech.meituan.com/2016/12/02/performance-tunning.html系统如何优化
 77. 单例实现 http://c.biancheng.net/view/1338.html
 78. https://tech.meituan.com/2016/06/24/java-hashmap.html hashmap
+79. 复习高cpu排查流程
+  - top 显示最高的进程
+  - top H -p 显示线程
+  - jstatck -pid 打印
+  - 找到对应的thread看代码
+80. cpu load高怎么排查
+  - cpu load 是指cpu在处理数据和排队进程的指标 max=cpu核数 飙高是因为切换太频繁,单任务执行时间太短
+  - 和cpu占用率高的场景差不多,都是jstack排查,一般是死循环或者fullgc
+80. 多线程ABC
+81. 表的连接
+82. spring作用域  https://www.w3cschool.cn/wkspring/nukv1ice.html 
+  - 单例 默认
+  - 原型
+  - 请求request
+  - 会话 session
+  - 全局会话 global session
+83. oom排查
+84. spring的生命周期 https://segmentfault.com/a/1190000020747302
+  - 实例化
+  - 属性装配
+  - aware借口 beanfactry beanname
+  - beanpostprocessor
+  - initialbean
+  - init-method
+  - beanpostprocessor
+85. 消息不丢失
+86. 红黑树和二叉查找树
+87. mq落盘保证数据不丢失
 # dubbo
 --- 
 
